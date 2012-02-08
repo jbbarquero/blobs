@@ -9,33 +9,40 @@ import javax.validation.constraints.Size;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
 import org.springframework.roo.addon.tostring.RooToString;
+import org.springframework.transaction.annotation.Transactional;
 
 @RooJavaBean
 @RooToString
-@RooJpaActiveRecord(persistenceUnit = "persistenceUnitMy", transactionManager = "mysql", table = "T_DOCUMENT")
-public class Document {
+@RooJpaActiveRecord(table = "T_DOCUMENTO", persistenceUnit = "persistenceUnitPg", transactionManager = "postgresql")
+public class Documento {
 
     @NotNull
     @Size(max = 100)
-    private String name;
+    private String nombre;
 
-    private String description;
-
-    @NotNull
-    private String filename;
+    private String descripcion;
 
     @NotNull
-    @Column(name = "imagen")
+    private String fichero;
+
+    @NotNull
+    @Column(name = "datos")
     @Lob
     @Basic(fetch = FetchType.LAZY)
-    private byte[] imagen;
+    private byte[] datos;
 
     @NotNull
-    private String contentType;
+    private String contenido;
 
-    private Long length;
+    private Long longitud;
 
     @NotNull
     @Size(max = 100)
-    private String url;
+    private String urli;
+
+    @Transactional("postgresql")
+	public static Documento findDocumento(Long id) {
+        if (id == null) return null;
+        return entityManager().find(Documento.class, id);
+    }
 }

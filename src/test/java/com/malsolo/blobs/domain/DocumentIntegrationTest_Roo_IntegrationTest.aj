@@ -19,7 +19,7 @@ privileged aspect DocumentIntegrationTest_Roo_IntegrationTest {
     
     declare @type: DocumentIntegrationTest: @ContextConfiguration(locations = "classpath:/META-INF/spring/applicationContext*.xml");
     
-    declare @type: DocumentIntegrationTest: @Transactional;
+    declare @type: DocumentIntegrationTest: @Transactional("mysql");
     
     @Test
     public void DocumentIntegrationTest.testCountDocuments() {

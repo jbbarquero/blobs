@@ -1,11 +1,10 @@
 package com.malsolo.blobs.main;
 
-import org.apache.log4j.Logger;
-
 import java.io.File;
 import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -15,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.malsolo.blobs.domain.Document;
 import com.malsolo.blobs.domain.DocumentDataOnDemand;
+import com.malsolo.blobs.domain.Documento;
+import com.malsolo.blobs.domain.DocumentoDataOnDemand;
 
 @Component
 public class Main {
@@ -23,13 +24,29 @@ public class Main {
 	 */
 	private static final Logger logger = Logger.getLogger(Main.class);
 	
-	private static final Long MYSQL_DOC_ID = 245L;
-
 	@Autowired
     private DocumentDataOnDemand dod;
+	@Autowired
+    private DocumentoDataOnDemand dodo;
 	
-	@Transactional
-	public Document doStuff() {
+	public class Documents {
+		private Document document;
+		private Documento documento;
+		
+		public Documents(Document document, Documento documento) {
+			this.document	= document;
+			this.documento	= documento;
+		}
+		
+		public Document getDocument() {
+			return document;
+		}
+		public Documento getDocumento() {
+			return documento;
+		}
+	}
+	
+	public Documents doStuff() {
 		if (logger.isDebugEnabled()) {
 			logger.debug("doStuff() - start");
 		}
@@ -46,56 +63,104 @@ public class Main {
 			e.printStackTrace();
 		}
 		
+		logger.warn("doStuff() - creating DocumenT...");
 		Document doc = dod.getNewTransientDocument(1);
-		
 		doc.setImagen(bytes);
-    	
 		doc.persist();
 		doc.flush();
+		logger.warn("doStuff() - DocumenT created.");
 		
+		logger.warn("doStuff() - creating DocumentO...");
+		Documento doco = dodo.getNewTransientDocumento(1);
+		doco.setDatos(bytes);
+		doco.persist();
+		doco.flush();
+		logger.warn("doStuff() - DocumentO created.");
+
 		if (logger.isDebugEnabled()) {
 			logger.debug("doStuff() - end");
 		}
-		return doc;
+		return new Documents(doc, doco);
 	}
 	
-	public void unDoStuff(Long id) {
+    @Transactional("mysql")
+	public File recoverDocument(Document document) {
 		if (logger.isDebugEnabled()) {
-			logger.debug("unDoStuff(Long) - start");
+			logger.debug("recoverDocument(Document) - start");
 		}
 
-		Document doc = Document.findDocument(id);
+		Document doc = Document.findDocument(document.getId());
+		if (doc == null) {
+			logger.error("recoverDocument(Document) - error, can't find Document with id: "+document.getId());
+			return null;
+		}
+		logger.debug("recoverDocument(Document) - Document found. "+doc.getId());
+		
+		File img = null;
 		try {
-			File newTiff = new File("src/test/resources/images/mysqltiff.tif");
-			Long sequential = 0L;
-			while (newTiff.exists()) {
-				newTiff = new File("src/test/resources/images/mysqltiff_"+id+"_"+(sequential++)+".tiff");
-			}
-			FileUtils.writeByteArrayToFile(newTiff, doc.getImagen());
+			img = createImage(new File("src/test/resources/images"), "mysqltiff", ".tiff", document.getId(), doc.getImagen());
+			logger.warn("recoverDocument(Document) - Image created: "+img.getAbsolutePath());
 		} catch (IOException e) {
-			logger.error("unDoStuff(Long)", e);
-
-			e.printStackTrace();
+			logger.error("recoverDocument(Document) - error creating images.", e);
 		}
 
 		if (logger.isDebugEnabled()) {
-			logger.debug("unDoStuff(Long) - end");
+			logger.debug("recoverDocument(Document) - end");
 		}
+		
+		return img;
 	}
+
+    @Transactional("postgresql")
+	public File recoverDocumento(Documento documento) {
+		if (logger.isDebugEnabled()) {
+			logger.debug("recoverDocumento(Documento) - start");
+		}
+
+		Documento doco = Documento.findDocumento(documento.getId());
+		if (doco == null) {
+			logger.error("recoverDocumento(Documento) - error, can't find DocumentO with id: "+documento.getId());
+			return null;
+		}
+		logger.debug("recoverDocumento(Documento) - DocumentO found. "+doco.getId());
+		
+		File img = null;
+		try {
+			img = createImage(new File("src/test/resources/images"), "postgresqltiff", ".tiff", documento.getId(), doco.getDatos());
+			logger.error("recoverDocumento(Documento) - Image created: "+img.getAbsolutePath());
+		} catch (IOException e) {
+			logger.error("recoverDocumento(Documento) - error creating images.", e);
+		}
+
+		if (logger.isDebugEnabled()) {
+			logger.debug("recoverDocumento(Documento) - end");
+		}
+		
+		return img;
+	}
+	
+	private File createImage(File path, String name, String extension, Long id, byte[] data) throws IOException {
+		File newTiff = new File(path.getPath()+File.separator+name+extension);
+		Long sequential = 0L;
+		while (newTiff.exists()) {
+			newTiff = new File(path.getPath()+File.separator+name+"_"+id+"_"+(sequential++)+".tiff");
+		}
+		FileUtils.writeByteArrayToFile(newTiff, data);
+		return newTiff;
+	} 
 	
 	public void doIt() {
 		if (logger.isDebugEnabled()) {
 			logger.debug("doIt() - start");
 		}
 
-		Document doc = Document.findDocument(MYSQL_DOC_ID);
-		if (doc==null) {
-			System.out.println("Document doesn't exist: "+MYSQL_DOC_ID);
-			doc = doStuff();
-			System.out.println("New document created: "+doc.getId());
-		}
-
-		unDoStuff(doc.getId());
+		Documents docs = doStuff();
+		logger.info("doIt() - Documents created. ");
+		
+		File img = recoverDocument(docs.getDocument());
+		logger.info("doIt() - Document recovered "+(img!=null?img.getAbsolutePath():"NOPE"));
+		img = recoverDocumento(docs.getDocumento());
+		logger.info("doIt() - Documento recovered "+(img!=null?img.getAbsolutePath():"NOPE"));
 
 		if (logger.isDebugEnabled()) {
 			logger.debug("doIt() - end");

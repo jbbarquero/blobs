@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 privileged aspect Document_Roo_Jpa_ActiveRecord {
     
-    @PersistenceContext
+    @PersistenceContext(unitName = "persistenceUnitMy")
     transient EntityManager Document.entityManager;
     
     public static final EntityManager Document.entityManager() {
@@ -37,13 +37,13 @@ privileged aspect Document_Roo_Jpa_ActiveRecord {
         return entityManager().createQuery("SELECT o FROM Document o", Document.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
     }
     
-    @Transactional
+    @Transactional("mysql")
     public void Document.persist() {
         if (this.entityManager == null) this.entityManager = entityManager();
         this.entityManager.persist(this);
     }
     
-    @Transactional
+    @Transactional("mysql")
     public void Document.remove() {
         if (this.entityManager == null) this.entityManager = entityManager();
         if (this.entityManager.contains(this)) {
@@ -54,19 +54,19 @@ privileged aspect Document_Roo_Jpa_ActiveRecord {
         }
     }
     
-    @Transactional
+    @Transactional("mysql")
     public void Document.flush() {
         if (this.entityManager == null) this.entityManager = entityManager();
         this.entityManager.flush();
     }
     
-    @Transactional
+    @Transactional("mysql")
     public void Document.clear() {
         if (this.entityManager == null) this.entityManager = entityManager();
         this.entityManager.clear();
     }
     
-    @Transactional
+    @Transactional("mysql")
     public Document Document.merge() {
         if (this.entityManager == null) this.entityManager = entityManager();
         Document merged = this.entityManager.merge(this);
