@@ -4,13 +4,11 @@
 package com.malsolo.blobs.domain;
 
 import com.malsolo.blobs.domain.Document;
-import com.malsolo.blobs.domain.DocumentDataOnDemand;
 import com.malsolo.blobs.domain.DocumentIntegrationTest;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,9 +20,6 @@ privileged aspect DocumentIntegrationTest_Roo_IntegrationTest {
     declare @type: DocumentIntegrationTest: @ContextConfiguration(locations = "classpath:/META-INF/spring/applicationContext*.xml");
     
     declare @type: DocumentIntegrationTest: @Transactional;
-    
-    @Autowired
-    private DocumentDataOnDemand DocumentIntegrationTest.dod;
     
     @Test
     public void DocumentIntegrationTest.testCountDocuments() {
