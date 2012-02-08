@@ -1,0 +1,19 @@
+// Spring Roo 1.2.0.RELEASE [rev 39eb957] log opened at 2012-02-08 09:06:47
+hint
+project --topLevelPackage com.malsolo.blobs --projectName --java 5
+persistence setup --provider HIBERNATE --database MYSQL --userName WASDSND1 --password 24rh971o --databaseName DSNP
+hint
+entity jpa --class ~.domain.Document --table T_DOCUMENT --testAutomatically 
+field string --fieldName name --notNull --sizeMax 100
+field other --fieldName description --type java.lang.String 
+field string --fieldName filename --notNull 
+field string --fieldName contentType --notNull 
+// [failed] field number --type java.lang.Long --fieldName size
+field number --type java.lang.Long --fieldName length
+field string --fieldName url --notNull --sizeMax 100
+perform eclipse
+perform eclipse
+// Spring Roo 1.2.0.RELEASE [rev 39eb957] log opened at 2012-02-08 09:43:44
+// Spring Roo 1.2.0.RELEASE [rev 39eb957] log closed at 2012-02-08 09:44:46
+perform tests
+perform tests
