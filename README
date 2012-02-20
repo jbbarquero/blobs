@@ -1,0 +1,39 @@
+I'm trying...
+
+...to manage BLOBs between MySQL and PostgreSQL in a JTA transaction.
+
+I'm trying Atomikos. I'm following all these tutorials:
+
+· http://blog.springsource.org/2011/08/15/configuring-spring-and-jta-without-full-java-ee/
+· http://blog.9mmedia.com/?p=489
+· http://it-essence.xs4all.nl/roller/technology/entry/transactions_over_multiple_jpa_persistence
+· http://www.atomikos.com/Documentation/SpringIntegration
+
+The environment: 
+
+· Spring 3.1
+· Hibernate 3.6.8
+· Atomikos 3.7.0
+
+But it doesn't work :(
+
+WARNING: edit database.properties with the appropriate username/password values.
+
+There are 3 Entities:
+
+- Document: which table is in MySQL.
+
+All its tests run successfully.
+
+- Documento: which table is in PostgreSQL.
+
+It doesn't work: Caused by: org.postgresql.util.PSQLException: Large Objects may not be used in auto-commit mode.
+
+If the transactions had worked, it would have been passed the tests.
+
+So, I presume there's a problem with Atomikos and PostgreSQL, as you can read here:
+
+http://www.atomikos.com/Documentation/KnownProblems#Postgresql_Limited_XA_Support
+
+You can see an example of an execution in console.txt
+

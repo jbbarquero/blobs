@@ -1,0 +1,120 @@
+2012-02-20 11:55:39,895 [main] INFO  org.springframework.test.context.TestContextManager - @TestExecutionListeners is not present for class [class com.malsolo.blobs.domain.DocumentoIntegrationTest]: using defaults.
+2012-02-20 11:55:40,231 [main] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader - Loading XML bean definitions from file [C:\APP_HOME\blobs\target\classes\META-INF\spring\applicationContext.xml]
+2012-02-20 11:55:40,861 [main] INFO  org.springframework.context.support.GenericApplicationContext - Refreshing org.springframework.context.support.GenericApplicationContext@48524852: startup date [Mon Feb 20 11:55:40 CET 2012]; root of context hierarchy
+2012-02-20 11:55:41,036 [main] INFO  org.springframework.context.support.PropertySourcesPlaceholderConfigurer - Loading properties file from file [C:\APP_HOME\blobs\target\classes\META-INF\spring\database.properties]
+2012-02-20 11:55:41,036 [main] INFO  org.springframework.context.support.PropertySourcesPlaceholderConfigurer - Loading properties file from file [C:\APP_HOME\blobs\target\classes\META-INF\spring\jpa.properties]
+2012-02-20 11:55:41,067 [main] INFO  org.springframework.beans.factory.support.DefaultListableBeanFactory - Pre-instantiating singletons in org.springframework.beans.factory.support.DefaultListableBeanFactory@58385838: defining beans [org.springframework.context.support.PropertySourcesPlaceholderConfigurer#0,org.springframework.context.config.internalBeanConfigurerAspect,documentDataOnDemand,documentoDataOnDemand,noDocumentoDataOnDemand,main,documentoServiceImpl,documentServiceImpl,org.springframework.context.annotation.internalConfigurationAnnotationProcessor,org.springframework.context.annotation.internalAutowiredAnnotationProcessor,org.springframework.context.annotation.internalRequiredAnnotationProcessor,org.springframework.context.annotation.internalPersistenceAnnotationProcessor,jpaProperties,dataSourceMy,entityManagerFactoryMy,dataSourcePg,entityManagerFactoryPg,atomikosUTM,atomikosUTX,transactionManager,org.springframework.transaction.config.internalTransactionAspect,org.springframework.context.annotation.ConfigurationClassPostProcessor$ImportAwareBeanPostProcessor#0]; root of factory hierarchy
+2012-02-20 11:55:41,582 [main] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - Building JPA container EntityManagerFactory for persistence unit 'persistenceUnitMy'
+2012-02-20 11:55:42,479 [main] WARN  org.hibernate.ejb.Ejb3Configuration - hibernate.connection.autocommit = false break the EJB3 specification
+2012-02-20 11:55:43,450 [main] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - Building JPA container EntityManagerFactory for persistence unit 'persistenceUnitPg'
+2012-02-20 11:55:43,523 [main] WARN  org.hibernate.ejb.Ejb3Configuration - hibernate.connection.autocommit = false break the EJB3 specification
+No properties path set - looking for transactions.properties in classpath...
+transactions.properties not found - looking for jta.properties in classpath...
+Using init file: /C:/APP_HOME/blobs/target/classes/jta.properties
+
+
+
+2012-02-20 11:56:13,878 [main] INFO  org.springframework.transaction.jta.JtaTransactionManager - Using JTA UserTransaction: com.atomikos.icatch.jta.UserTransactionImp@3e243e24
+2012-02-20 11:56:13,878 [main] INFO  org.springframework.transaction.jta.JtaTransactionManager - Using JTA TransactionManager: com.atomikos.icatch.jta.UserTransactionManager@2e782e78
+
+
+
+2012-02-20 11:56:20,079 [main] DEBUG atomikos - getCompositeTransaction() returning NULL!
+2012-02-20 11:56:20,079 [main] DEBUG atomikos - getCompositeTransaction() returning NULL!
+2012-02-20 11:56:23,288 [main] DEBUG atomikos - getCompositeTransaction() returning NULL!
+2012-02-20 11:56:23,332 [main] INFO  atomikos - createCompositeTransaction ( 5000 ): created new ROOT transaction with id tmdev0000100077
+2012-02-20 11:56:23,337 [main] INFO  org.springframework.test.context.transaction.TransactionalTestExecutionListener - Began transaction (1): transaction manager [org.springframework.transaction.jta.JtaTransactionManager@31d631d6]; rollback [true]
+2012-02-20 11:56:28,461 [Atomikos:0] INFO  atomikos - setRollbackOnly() called for transaction tmdev0000100077
+
+
+
+2012-02-20 11:56:48,020 [main] DEBUG atomikos - getCompositeTransaction()  returning instance with id tmdev0000100077
+2012-02-20 11:56:48,020 [main] DEBUG atomikos - getCompositeTransaction()  returning instance with id tmdev0000100077
+
+
+
+
+
+2012-02-20 11:57:20,048 [main] DEBUG atomikos - getCompositeTransaction()  returning instance with id tmdev0000100077
+2012-02-20 11:57:20,289 [main] DEBUG org.hibernate.jdbc.AbstractBatcher - about to open PreparedStatement (open PreparedStatements: 0, globally: 0)
+2012-02-20 11:57:20,289 [main] DEBUG org.hibernate.jdbc.ConnectionManager - opening JDBC connection
+2012-02-20 11:57:20,294 [main] DEBUG org.hibernate.SQL - 
+    select
+        documento0_.id as id8_,
+        documento0_.descripcion as descripc2_8_,
+        documento0_.fichero as fichero8_,
+        documento0_.longitud as longitud8_,
+        documento0_.nombre as nombre8_,
+        documento0_.octetos as octetos8_,
+        documento0_.tipo_contenido as tipo7_8_,
+        documento0_.uri as uri8_,
+        documento0_.version as version8_ 
+    from
+        t_documento documento0_ limit ?
+Hibernate: 
+    select
+        documento0_.id as id8_,
+        documento0_.descripcion as descripc2_8_,
+        documento0_.fichero as fichero8_,
+        documento0_.longitud as longitud8_,
+        documento0_.nombre as nombre8_,
+        documento0_.octetos as octetos8_,
+        documento0_.tipo_contenido as tipo7_8_,
+        documento0_.uri as uri8_,
+        documento0_.version as version8_ 
+    from
+        t_documento documento0_ limit ?
+2012-02-20 11:57:20,299 [main] DEBUG org.hibernate.jdbc.AbstractBatcher - about to open ResultSet (open ResultSets: 0, globally: 0)
+2012-02-20 11:57:20,304 [main] DEBUG org.hibernate.jdbc.AbstractBatcher - about to close ResultSet (open ResultSets: 1, globally: 1)
+2012-02-20 11:57:20,304 [main] DEBUG org.hibernate.jdbc.AbstractBatcher - about to close PreparedStatement (open PreparedStatements: 1, globally: 1)
+2012-02-20 11:57:20,304 [main] DEBUG org.hibernate.jdbc.ConnectionManager - aggressively releasing JDBC connection
+2012-02-20 11:57:20,304 [main] DEBUG org.hibernate.jdbc.ConnectionManager - releasing JDBC connection [ (open PreparedStatements: 0, globally: 0) (open ResultSets: 0, globally: 0)]
+
+
+
+
+2012-02-20 11:58:08,724 [main] DEBUG atomikos - getCompositeTransaction()  returning instance with id tmdev0000100077
+2012-02-20 11:58:08,725 [main] DEBUG atomikos - getCompositeTransaction()  returning instance with id tmdev0000100077
+2012-02-20 11:58:08,731 [main] DEBUG org.hibernate.jdbc.AbstractBatcher - about to open PreparedStatement (open PreparedStatements: 0, globally: 0)
+2012-02-20 11:58:08,731 [main] DEBUG org.hibernate.jdbc.ConnectionManager - opening JDBC connection
+2012-02-20 11:58:08,732 [main] DEBUG org.hibernate.SQL - 
+    select
+        nextval ('hibernate_sequence')
+Hibernate: 
+    select
+        nextval ('hibernate_sequence')
+2012-02-20 11:58:08,741 [main] DEBUG org.hibernate.jdbc.AbstractBatcher - about to close PreparedStatement (open PreparedStatements: 1, globally: 1)
+2012-02-20 11:58:08,741 [main] DEBUG org.hibernate.jdbc.ConnectionManager - aggressively releasing JDBC connection
+2012-02-20 11:58:08,741 [main] DEBUG org.hibernate.jdbc.ConnectionManager - releasing JDBC connection [ (open PreparedStatements: 0, globally: 0) (open ResultSets: 0, globally: 0)]
+
+
+
+2012-02-20 11:58:36,452 [main] DEBUG atomikos - getCompositeTransaction()  returning instance with id tmdev0000100077
+2012-02-20 11:58:36,452 [main] DEBUG atomikos - getCompositeTransaction()  returning instance with id tmdev0000100077
+
+
+
+2012-02-20 12:00:38,372 [main] DEBUG atomikos - getCompositeTransaction()  returning instance with id tmdev0000100077
+2012-02-20 12:00:38,372 [main] DEBUG atomikos - getCompositeTransaction()  returning instance with id tmdev0000100077
+2012-02-20 12:01:12,655 [main] DEBUG atomikos - getCompositeTransaction()  returning instance with id tmdev0000100077
+2012-02-20 12:01:12,655 [main] INFO  atomikos - setRollbackOnly() called for transaction tmdev0000100077
+
+
+2012-02-20 12:01:30,269 [main] DEBUG atomikos - getCompositeTransaction()  returning instance with id tmdev0000100077
+2012-02-20 12:01:30,269 [main] DEBUG atomikos - getCompositeTransaction()  returning instance with id tmdev0000100077
+2012-02-20 12:01:30,274 [main] DEBUG atomikos - getCompositeTransaction()  returning instance with id tmdev0000100077
+2012-02-20 12:01:30,274 [main] INFO  atomikos - setRollbackOnly() called for transaction tmdev0000100077
+
+
+
+2012-02-20 12:01:35,647 [main] DEBUG atomikos - getCompositeTransaction()  returning instance with id tmdev0000100077
+2012-02-20 12:01:35,647 [main] DEBUG atomikos - getCompositeTransaction()  returning instance with id tmdev0000100077
+2012-02-20 12:01:35,647 [main] DEBUG atomikos - getCompositeTransaction()  returning instance with id tmdev0000100077
+2012-02-20 12:01:35,647 [main] DEBUG atomikos - getCompositeTransaction()  returning instance with id tmdev0000100077
+2012-02-20 12:01:35,652 [main] INFO  atomikos - rollback() done of transaction tmdev0000100077
+2012-02-20 12:01:35,657 [main] INFO  org.springframework.test.context.transaction.TransactionalTestExecutionListener - Rolled back transaction after test execution for test context [[TestContext@79867986 testClass = DocumentoIntegrationTest, testInstance = com.malsolo.blobs.domain.DocumentoIntegrationTest@24302430, testMethod = testCountAllDocumentoes@DocumentoIntegrationTest, testException = org.springframework.dao.InvalidDataAccessApiUsageException: no transaction is in progress; nested exception is javax.persistence.TransactionRequiredException: no transaction is in progress, mergedContextConfiguration = [MergedContextConfiguration@19561956 testClass = DocumentoIntegrationTest, locations = '{classpath:/META-INF/spring/applicationContext*.xml}', classes = '{}', activeProfiles = '{}', contextLoader = 'org.springframework.test.context.support.DelegatingSmartContextLoader']]]
+2012-02-20 12:01:35,723 [Thread-3] INFO  org.springframework.context.support.GenericApplicationContext - Closing org.springframework.context.support.GenericApplicationContext@48524852: startup date [Mon Feb 20 11:55:40 CET 2012]; root of context hierarchy
+2012-02-20 12:01:35,728 [Thread-3] INFO  org.springframework.beans.factory.support.DefaultListableBeanFactory - Destroying singletons in org.springframework.beans.factory.support.DefaultListableBeanFactory@58385838: defining beans [org.springframework.context.support.PropertySourcesPlaceholderConfigurer#0,org.springframework.context.config.internalBeanConfigurerAspect,documentDataOnDemand,documentoDataOnDemand,noDocumentoDataOnDemand,main,documentoServiceImpl,documentServiceImpl,org.springframework.context.annotation.internalConfigurationAnnotationProcessor,org.springframework.context.annotation.internalAutowiredAnnotationProcessor,org.springframework.context.annotation.internalRequiredAnnotationProcessor,org.springframework.context.annotation.internalPersistenceAnnotationProcessor,jpaProperties,dataSourceMy,entityManagerFactoryMy,dataSourcePg,entityManagerFactoryPg,atomikosUTM,atomikosUTX,transactionManager,org.springframework.transaction.config.internalTransactionAspect,org.springframework.context.annotation.ConfigurationClassPostProcessor$ImportAwareBeanPostProcessor#0]; root of factory hierarchy
+2012-02-20 12:01:35,777 [Thread-3] DEBUG atomikos - Transaction Service: Shutdown acquired lock on waiter.
+2012-02-20 12:01:35,799 [Thread-3] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'persistenceUnitPg'
+2012-02-20 12:01:35,811 [Thread-3] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'persistenceUnitMy'
