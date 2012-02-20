@@ -31,14 +31,6 @@ privileged aspect Document_Roo_JavaBean {
         this.filename = filename;
     }
     
-    public byte[] Document.getImagen() {
-        return this.imagen;
-    }
-    
-    public void Document.setImagen(byte[] imagen) {
-        this.imagen = imagen;
-    }
-    
     public String Document.getContentType() {
         return this.contentType;
     }
@@ -55,12 +47,20 @@ privileged aspect Document_Roo_JavaBean {
         this.length = length;
     }
     
-    public String Document.getUrl() {
-        return this.url;
+    public String Document.getUri() {
+        return this.uri;
     }
     
-    public void Document.setUrl(String url) {
-        this.url = url;
+    public void Document.setUri(String uri) {
+        this.uri = uri;
+    }
+    
+    public byte[] Document.getBytes() {
+        return this.bytes;
+    }
+    
+    public void Document.setBytes(byte[] bytes) {
+        this.bytes = bytes;
     }
     
 }

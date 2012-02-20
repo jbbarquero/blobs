@@ -31,20 +31,12 @@ privileged aspect Documento_Roo_JavaBean {
         this.fichero = fichero;
     }
     
-    public byte[] Documento.getDatos() {
-        return this.datos;
+    public String Documento.getTipoContenido() {
+        return this.tipoContenido;
     }
     
-    public void Documento.setDatos(byte[] datos) {
-        this.datos = datos;
-    }
-    
-    public String Documento.getContenido() {
-        return this.contenido;
-    }
-    
-    public void Documento.setContenido(String contenido) {
-        this.contenido = contenido;
+    public void Documento.setTipoContenido(String tipoContenido) {
+        this.tipoContenido = tipoContenido;
     }
     
     public Long Documento.getLongitud() {
@@ -55,12 +47,20 @@ privileged aspect Documento_Roo_JavaBean {
         this.longitud = longitud;
     }
     
-    public String Documento.getUrli() {
-        return this.urli;
+    public String Documento.getUri() {
+        return this.uri;
     }
     
-    public void Documento.setUrli(String urli) {
-        this.urli = urli;
+    public void Documento.setUri(String uri) {
+        this.uri = uri;
+    }
+    
+    public byte[] Documento.getOctetos() {
+        return this.octetos;
+    }
+    
+    public void Documento.setOctetos(byte[] octetos) {
+        this.octetos = octetos;
     }
     
 }

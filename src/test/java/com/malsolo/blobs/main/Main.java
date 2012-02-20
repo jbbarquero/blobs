@@ -65,14 +65,14 @@ public class Main {
 		
 		logger.warn("doStuff() - creating DocumenT...");
 		Document doc = dod.getNewTransientDocument(1);
-		doc.setImagen(bytes);
+		doc.setBytes(bytes);
 		doc.persist();
 		doc.flush();
 		logger.warn("doStuff() - DocumenT created.");
 		
 		logger.warn("doStuff() - creating DocumentO...");
 		Documento doco = dodo.getNewTransientDocumento(1);
-		doco.setDatos(bytes);
+		doco.setOctetos(bytes);
 		doco.persist();
 		doco.flush();
 		logger.warn("doStuff() - DocumentO created.");
@@ -98,7 +98,7 @@ public class Main {
 		
 		File img = null;
 		try {
-			img = createImage(new File("src/test/resources/images"), "mysqltiff", ".tiff", document.getId(), doc.getImagen());
+			img = createImage(new File("src/test/resources/images"), "mysqltiff", ".tiff", document.getId(), doc.getBytes());
 			logger.warn("recoverDocument(Document) - Image created: "+img.getAbsolutePath());
 		} catch (IOException e) {
 			logger.error("recoverDocument(Document) - error creating images.", e);
@@ -126,7 +126,7 @@ public class Main {
 		
 		File img = null;
 		try {
-			img = createImage(new File("src/test/resources/images"), "postgresqltiff", ".tiff", documento.getId(), doco.getDatos());
+			img = createImage(new File("src/test/resources/images"), "postgresqltiff", ".tiff", documento.getId(), doco.getOctetos());
 			logger.error("recoverDocumento(Documento) - Image created: "+img.getAbsolutePath());
 		} catch (IOException e) {
 			logger.error("recoverDocumento(Documento) - error creating images.", e);

@@ -10,9 +10,10 @@
         <aspectj.version>1.6.12.M2</aspectj.version>
         <java.version>5</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <roo.version>1.2.0.RELEASE</roo.version>
+        <roo.version>1.2.1.RELEASE</roo.version>
         <slf4j.version>1.6.2</slf4j.version>
         <spring.version>3.1.0.RELEASE</spring.version>
+        <atomikos.version>3.7.0</atomikos.version>
     </properties>
     <repositories>
         <repository>
@@ -248,6 +249,32 @@
             <artifactId>commons-io</artifactId>
             <version>2.0.1</version>
             <scope>test</scope>
+        </dependency>
+        <!-- Atomikos -->
+        <dependency>
+            <groupId>com.atomikos</groupId>
+            <artifactId>atomikos-util</artifactId>
+            <version>${atomikos.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.atomikos</groupId>
+            <artifactId>transactions</artifactId>
+            <version>${atomikos.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.atomikos</groupId>
+            <artifactId>transactions-api</artifactId>
+            <version>${atomikos.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.atomikos</groupId>
+            <artifactId>transactions-jta</artifactId>
+            <version>${atomikos.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.atomikos</groupId>
+            <artifactId>transactions-hibernate3</artifactId>
+            <version>${atomikos.version}</version>
         </dependency>
     </dependencies>
     <build>

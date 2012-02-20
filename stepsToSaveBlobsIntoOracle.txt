@@ -1,4 +1,18 @@
 ############################
+>>>>> Original problem <<<
+############################
+
+Caused by: java.sql.SQLException: operación no permitida: streams type cannot be used in batching
+	at oracle.jdbc.dbaccess.DBError.throwSqlException(DBError.java:134)
+	at oracle.jdbc.dbaccess.DBError.throwSqlException(DBError.java:179)
+	at oracle.jdbc.driver.OraclePreparedStatement.addBatch(OraclePreparedStatement.java:3775)
+	at org.apache.commons.dbcp.DelegatingPreparedStatement.addBatch(DelegatingPreparedStatement.java:175)
+	at org.apache.commons.dbcp.DelegatingPreparedStatement.addBatch(DelegatingPreparedStatement.java:175)
+	at org.hibernate.jdbc.BatchingBatcher.addToBatch(BatchingBatcher.java:53)
+	at org.hibernate.persister.entity.AbstractEntityPersister.insert(AbstractEntityPersister.java:2434)
+	... 47 more
+
+############################
 >>>>> First attempt: failure <<<
 ############################
 

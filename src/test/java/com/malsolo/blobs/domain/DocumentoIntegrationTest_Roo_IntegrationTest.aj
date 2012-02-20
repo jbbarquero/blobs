@@ -3,9 +3,8 @@
 
 package com.malsolo.blobs.domain;
 
-import com.malsolo.blobs.domain.Documento;
-import com.malsolo.blobs.domain.DocumentoDataOnDemand;
 import com.malsolo.blobs.domain.DocumentoIntegrationTest;
+import com.malsolo.blobs.service.DocumentoService;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
@@ -21,17 +20,10 @@ privileged aspect DocumentoIntegrationTest_Roo_IntegrationTest {
     
     declare @type: DocumentoIntegrationTest: @ContextConfiguration(locations = "classpath:/META-INF/spring/applicationContext*.xml");
     
-    declare @type: DocumentoIntegrationTest: @Transactional("postgresql");
+    declare @type: DocumentoIntegrationTest: @Transactional;
     
     @Autowired
-    private DocumentoDataOnDemand DocumentoIntegrationTest.dod;
-    
-    @Test
-    public void DocumentoIntegrationTest.testCountDocumentoes() {
-        Assert.assertNotNull("Data on demand for 'Documento' failed to initialize correctly", dod.getRandomDocumento());
-        long count = Documento.countDocumentoes();
-        Assert.assertTrue("Counter for 'Documento' incorrectly reported there were no entries", count > 0);
-    }
+    DocumentoService DocumentoIntegrationTest.documentoService;
     
     @Test
     public void DocumentoIntegrationTest.testFindDocumento() {
@@ -39,7 +31,7 @@ privileged aspect DocumentoIntegrationTest_Roo_IntegrationTest {
         Assert.assertNotNull("Data on demand for 'Documento' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'Documento' failed to provide an identifier", id);
-        obj = Documento.findDocumento(id);
+        obj = documentoService.findDocumento(id);
         Assert.assertNotNull("Find method for 'Documento' illegally returned null for id '" + id + "'", obj);
         Assert.assertEquals("Find method for 'Documento' returned the incorrect identifier", id, obj.getId());
     }
@@ -47,9 +39,9 @@ privileged aspect DocumentoIntegrationTest_Roo_IntegrationTest {
     @Test
     public void DocumentoIntegrationTest.testFindAllDocumentoes() {
         Assert.assertNotNull("Data on demand for 'Documento' failed to initialize correctly", dod.getRandomDocumento());
-        long count = Documento.countDocumentoes();
+        long count = documentoService.countAllDocumentoes();
         Assert.assertTrue("Too expensive to perform a find all test for 'Documento', as there are " + count + " entries; set the findAllMaximum to exceed this value or set findAll=false on the integration test annotation to disable the test", count < 250);
-        List<Documento> result = Documento.findAllDocumentoes();
+        List<Documento> result = documentoService.findAllDocumentoes();
         Assert.assertNotNull("Find all method for 'Documento' illegally returned null", result);
         Assert.assertTrue("Find all method for 'Documento' failed to return any data", result.size() > 0);
     }
@@ -57,11 +49,11 @@ privileged aspect DocumentoIntegrationTest_Roo_IntegrationTest {
     @Test
     public void DocumentoIntegrationTest.testFindDocumentoEntries() {
         Assert.assertNotNull("Data on demand for 'Documento' failed to initialize correctly", dod.getRandomDocumento());
-        long count = Documento.countDocumentoes();
+        long count = documentoService.countAllDocumentoes();
         if (count > 20) count = 20;
         int firstResult = 0;
         int maxResults = (int) count;
-        List<Documento> result = Documento.findDocumentoEntries(firstResult, maxResults);
+        List<Documento> result = documentoService.findDocumentoEntries(firstResult, maxResults);
         Assert.assertNotNull("Find entries method for 'Documento' illegally returned null", result);
         Assert.assertEquals("Find entries method for 'Documento' returned an incorrect number of entries", count, result.size());
     }
@@ -72,7 +64,7 @@ privileged aspect DocumentoIntegrationTest_Roo_IntegrationTest {
         Assert.assertNotNull("Data on demand for 'Documento' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'Documento' failed to provide an identifier", id);
-        obj = Documento.findDocumento(id);
+        obj = documentoService.findDocumento(id);
         Assert.assertNotNull("Find method for 'Documento' illegally returned null for id '" + id + "'", obj);
         boolean modified =  dod.modifyDocumento(obj);
         Integer currentVersion = obj.getVersion();
@@ -81,41 +73,41 @@ privileged aspect DocumentoIntegrationTest_Roo_IntegrationTest {
     }
     
     @Test
-    public void DocumentoIntegrationTest.testMergeUpdate() {
+    public void DocumentoIntegrationTest.testUpdateDocumentoUpdate() {
         Documento obj = dod.getRandomDocumento();
         Assert.assertNotNull("Data on demand for 'Documento' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'Documento' failed to provide an identifier", id);
-        obj = Documento.findDocumento(id);
+        obj = documentoService.findDocumento(id);
         boolean modified =  dod.modifyDocumento(obj);
         Integer currentVersion = obj.getVersion();
-        Documento merged = obj.merge();
+        Documento merged = documentoService.updateDocumento(obj);
         obj.flush();
         Assert.assertEquals("Identifier of merged object not the same as identifier of original object", merged.getId(), id);
         Assert.assertTrue("Version for 'Documento' failed to increment on merge and flush directive", (currentVersion != null && obj.getVersion() > currentVersion) || !modified);
     }
     
     @Test
-    public void DocumentoIntegrationTest.testPersist() {
+    public void DocumentoIntegrationTest.testSaveDocumento() {
         Assert.assertNotNull("Data on demand for 'Documento' failed to initialize correctly", dod.getRandomDocumento());
         Documento obj = dod.getNewTransientDocumento(Integer.MAX_VALUE);
         Assert.assertNotNull("Data on demand for 'Documento' failed to provide a new transient entity", obj);
         Assert.assertNull("Expected 'Documento' identifier to be null", obj.getId());
-        obj.persist();
+        documentoService.saveDocumento(obj);
         obj.flush();
         Assert.assertNotNull("Expected 'Documento' identifier to no longer be null", obj.getId());
     }
     
     @Test
-    public void DocumentoIntegrationTest.testRemove() {
+    public void DocumentoIntegrationTest.testDeleteDocumento() {
         Documento obj = dod.getRandomDocumento();
         Assert.assertNotNull("Data on demand for 'Documento' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'Documento' failed to provide an identifier", id);
-        obj = Documento.findDocumento(id);
-        obj.remove();
+        obj = documentoService.findDocumento(id);
+        documentoService.deleteDocumento(obj);
         obj.flush();
-        Assert.assertNull("Failed to remove 'Documento' with identifier '" + id + "'", Documento.findDocumento(id));
+        Assert.assertNull("Failed to remove 'Documento' with identifier '" + id + "'", documentoService.findDocumento(id));
     }
     
 }

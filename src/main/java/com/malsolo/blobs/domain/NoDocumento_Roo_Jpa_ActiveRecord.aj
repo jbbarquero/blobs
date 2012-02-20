@@ -3,60 +3,73 @@
 
 package com.malsolo.blobs.domain;
 
-import com.malsolo.blobs.domain.Documento;
+import com.malsolo.blobs.domain.NoDocumento;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.springframework.transaction.annotation.Transactional;
 
-privileged aspect Documento_Roo_Jpa_ActiveRecord {
+privileged aspect NoDocumento_Roo_Jpa_ActiveRecord {
     
     @PersistenceContext(unitName = "persistenceUnitPg")
-    transient EntityManager Documento.entityManager;
+    transient EntityManager NoDocumento.entityManager;
     
-    public static final EntityManager Documento.entityManager() {
-        EntityManager em = new Documento().entityManager;
+    public static final EntityManager NoDocumento.entityManager() {
+        EntityManager em = new NoDocumento().entityManager;
         if (em == null) throw new IllegalStateException("Entity manager has not been injected (is the Spring Aspects JAR configured as an AJC/AJDT aspects library?)");
         return em;
     }
     
-    public static List<Documento> Documento.findAllDocumentoes() {
-        return entityManager().createQuery("SELECT o FROM Documento o", Documento.class).getResultList();
+    public static long NoDocumento.countNoDocumentoes() {
+        return entityManager().createQuery("SELECT COUNT(o) FROM NoDocumento o", Long.class).getSingleResult();
+    }
+    
+    public static List<NoDocumento> NoDocumento.findAllNoDocumentoes() {
+        return entityManager().createQuery("SELECT o FROM NoDocumento o", NoDocumento.class).getResultList();
+    }
+    
+    public static NoDocumento NoDocumento.findNoDocumento(Long id) {
+        if (id == null) return null;
+        return entityManager().find(NoDocumento.class, id);
+    }
+    
+    public static List<NoDocumento> NoDocumento.findNoDocumentoEntries(int firstResult, int maxResults) {
+        return entityManager().createQuery("SELECT o FROM NoDocumento o", NoDocumento.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
     }
     
     @Transactional
-    public void Documento.persist() {
+    public void NoDocumento.persist() {
         if (this.entityManager == null) this.entityManager = entityManager();
         this.entityManager.persist(this);
     }
     
     @Transactional
-    public void Documento.remove() {
+    public void NoDocumento.remove() {
         if (this.entityManager == null) this.entityManager = entityManager();
         if (this.entityManager.contains(this)) {
             this.entityManager.remove(this);
         } else {
-            Documento attached = Documento.findDocumento(this.id);
+            NoDocumento attached = NoDocumento.findNoDocumento(this.id);
             this.entityManager.remove(attached);
         }
     }
     
     @Transactional
-    public void Documento.flush() {
+    public void NoDocumento.flush() {
         if (this.entityManager == null) this.entityManager = entityManager();
         this.entityManager.flush();
     }
     
     @Transactional
-    public void Documento.clear() {
+    public void NoDocumento.clear() {
         if (this.entityManager == null) this.entityManager = entityManager();
         this.entityManager.clear();
     }
     
     @Transactional
-    public Documento Documento.merge() {
+    public NoDocumento NoDocumento.merge() {
         if (this.entityManager == null) this.entityManager = entityManager();
-        Documento merged = this.entityManager.merge(this);
+        NoDocumento merged = this.entityManager.merge(this);
         this.entityManager.flush();
         return merged;
     }

@@ -12,7 +12,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 
 @RooJavaBean
 @RooToString
-@RooJpaActiveRecord(persistenceUnit = "persistenceUnitMy", transactionManager = "mysql", table = "T_DOCUMENT")
+@RooJpaActiveRecord(persistenceUnit = "persistenceUnitMy", table = "T_DOCUMENT")
 public class Document {
 
     @NotNull
@@ -25,17 +25,18 @@ public class Document {
     private String filename;
 
     @NotNull
-    @Column(name = "imagen")
-    @Lob
-    @Basic(fetch = FetchType.LAZY)
-    private byte[] imagen;
-
-    @NotNull
     private String contentType;
 
     private Long length;
 
     @NotNull
     @Size(max = 100)
-    private String url;
+    private String uri;
+
+    @NotNull
+    @Column(name = "bytes")
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    private byte[] bytes;
+
 }

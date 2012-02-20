@@ -5,13 +5,10 @@ package com.malsolo.blobs.domain;
 
 import com.malsolo.blobs.domain.Documento;
 import com.malsolo.blobs.domain.DocumentoDataOnDemand;
+import com.malsolo.blobs.service.DocumentoService;
 import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Random;
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 privileged aspect DocumentoDataOnDemand_Roo_DataOnDemand {
@@ -20,28 +17,19 @@ privileged aspect DocumentoDataOnDemand_Roo_DataOnDemand {
     
     private Random DocumentoDataOnDemand.rnd = new SecureRandom();
     
-    private List<Documento> DocumentoDataOnDemand.data;
+    @Autowired
+    DocumentoService DocumentoDataOnDemand.documentoService;
     
     public Documento DocumentoDataOnDemand.getNewTransientDocumento(int index) {
         Documento obj = new Documento();
-        setContenido(obj, index);
-        setDatos(obj, index);
         setDescripcion(obj, index);
         setFichero(obj, index);
         setLongitud(obj, index);
         setNombre(obj, index);
-        setUrli(obj, index);
+        setOctetos(obj, index);
+        setTipoContenido(obj, index);
+        setUri(obj, index);
         return obj;
-    }
-    
-    public void DocumentoDataOnDemand.setContenido(Documento obj, int index) {
-        String contenido = "contenido_" + index;
-        obj.setContenido(contenido);
-    }
-    
-    public void DocumentoDataOnDemand.setDatos(Documento obj, int index) {
-        byte[] datos = String.valueOf(index).getBytes();
-        obj.setDatos(datos);
     }
     
     public void DocumentoDataOnDemand.setDescripcion(Documento obj, int index) {
@@ -67,12 +55,22 @@ privileged aspect DocumentoDataOnDemand_Roo_DataOnDemand {
         obj.setNombre(nombre);
     }
     
-    public void DocumentoDataOnDemand.setUrli(Documento obj, int index) {
-        String urli = "urli_" + index;
-        if (urli.length() > 100) {
-            urli = urli.substring(0, 100);
+    public void DocumentoDataOnDemand.setOctetos(Documento obj, int index) {
+        byte[] octetos = String.valueOf(index).getBytes();
+        obj.setOctetos(octetos);
+    }
+    
+    public void DocumentoDataOnDemand.setTipoContenido(Documento obj, int index) {
+        String tipoContenido = "tipoContenido_" + index;
+        obj.setTipoContenido(tipoContenido);
+    }
+    
+    public void DocumentoDataOnDemand.setUri(Documento obj, int index) {
+        String uri = "uri_" + index;
+        if (uri.length() > 100) {
+            uri = uri.substring(0, 100);
         }
-        obj.setUrli(urli);
+        obj.setUri(uri);
     }
     
     public Documento DocumentoDataOnDemand.getSpecificDocumento(int index) {
@@ -85,47 +83,18 @@ privileged aspect DocumentoDataOnDemand_Roo_DataOnDemand {
         }
         Documento obj = data.get(index);
         Long id = obj.getId();
-        return Documento.findDocumento(id);
+        return documentoService.findDocumento(id);
     }
     
     public Documento DocumentoDataOnDemand.getRandomDocumento() {
         init();
         Documento obj = data.get(rnd.nextInt(data.size()));
         Long id = obj.getId();
-        return Documento.findDocumento(id);
+        return documentoService.findDocumento(id);
     }
     
     public boolean DocumentoDataOnDemand.modifyDocumento(Documento obj) {
         return false;
-    }
-    
-    public void DocumentoDataOnDemand.init() {
-        int from = 0;
-        int to = 10;
-        data = Documento.findDocumentoEntries(from, to);
-        if (data == null) {
-            throw new IllegalStateException("Find entries implementation for 'Documento' illegally returned null");
-        }
-        if (!data.isEmpty()) {
-            return;
-        }
-        
-        data = new ArrayList<Documento>();
-        for (int i = 0; i < 10; i++) {
-            Documento obj = getNewTransientDocumento(i);
-            try {
-                obj.persist();
-            } catch (ConstraintViolationException e) {
-                StringBuilder msg = new StringBuilder();
-                for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {
-                    ConstraintViolation<?> cv = iter.next();
-                    msg.append("[").append(cv.getConstraintDescriptor()).append(":").append(cv.getMessage()).append("=").append(cv.getInvalidValue()).append("]");
-                }
-                throw new RuntimeException(msg.toString(), e);
-            }
-            obj.flush();
-            data.add(obj);
-        }
     }
     
 }

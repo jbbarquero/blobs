@@ -19,3 +19,11 @@ field string --fieldName fichero --notNull
 field string --fieldName contenido --notNull 
 field number --type java.lang.Long --fieldName longitud
 field string --fieldName urli --notNull --sizeMax 100
+
+entity jpa --class ~.domain.NoDocumento --table T_NO_DOCUMENT --persistenceUnit persistenceUnitPg --testAutomatically 
+field string --fieldName nombre --notNull --sizeMax 100
+field other --fieldName descripcion --type java.lang.String 
+field string --fieldName fichero --notNull 
+field string --fieldName contenido --notNull 
+field number --type java.lang.Long --fieldName longitud
+field string --fieldName urli --notNull --sizeMax 100

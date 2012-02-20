@@ -5,6 +5,7 @@ package com.malsolo.blobs.domain;
 
 import com.malsolo.blobs.domain.Document;
 import com.malsolo.blobs.domain.DocumentDataOnDemand;
+import com.malsolo.blobs.service.DocumentService;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.Random;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 privileged aspect DocumentDataOnDemand_Roo_DataOnDemand {
@@ -22,16 +24,24 @@ privileged aspect DocumentDataOnDemand_Roo_DataOnDemand {
     
     private List<Document> DocumentDataOnDemand.data;
     
+    @Autowired
+    DocumentService DocumentDataOnDemand.documentService;
+    
     public Document DocumentDataOnDemand.getNewTransientDocument(int index) {
         Document obj = new Document();
+        setBytes(obj, index);
         setContentType(obj, index);
         setDescription(obj, index);
         setFilename(obj, index);
-        setImagen(obj, index);
         setLength(obj, index);
         setName(obj, index);
-        setUrl(obj, index);
+        setUri(obj, index);
         return obj;
+    }
+    
+    public void DocumentDataOnDemand.setBytes(Document obj, int index) {
+        byte[] bytes = String.valueOf(index).getBytes();
+        obj.setBytes(bytes);
     }
     
     public void DocumentDataOnDemand.setContentType(Document obj, int index) {
@@ -49,11 +59,6 @@ privileged aspect DocumentDataOnDemand_Roo_DataOnDemand {
         obj.setFilename(filename);
     }
     
-    public void DocumentDataOnDemand.setImagen(Document obj, int index) {
-        byte[] imagen = String.valueOf(index).getBytes();
-        obj.setImagen(imagen);
-    }
-    
     public void DocumentDataOnDemand.setLength(Document obj, int index) {
         Long length = new Integer(index).longValue();
         obj.setLength(length);
@@ -67,12 +72,12 @@ privileged aspect DocumentDataOnDemand_Roo_DataOnDemand {
         obj.setName(name);
     }
     
-    public void DocumentDataOnDemand.setUrl(Document obj, int index) {
-        String url = "url_" + index;
-        if (url.length() > 100) {
-            url = url.substring(0, 100);
+    public void DocumentDataOnDemand.setUri(Document obj, int index) {
+        String uri = "uri_" + index;
+        if (uri.length() > 100) {
+            uri = uri.substring(0, 100);
         }
-        obj.setUrl(url);
+        obj.setUri(uri);
     }
     
     public Document DocumentDataOnDemand.getSpecificDocument(int index) {
@@ -85,14 +90,14 @@ privileged aspect DocumentDataOnDemand_Roo_DataOnDemand {
         }
         Document obj = data.get(index);
         Long id = obj.getId();
-        return Document.findDocument(id);
+        return documentService.findDocument(id);
     }
     
     public Document DocumentDataOnDemand.getRandomDocument() {
         init();
         Document obj = data.get(rnd.nextInt(data.size()));
         Long id = obj.getId();
-        return Document.findDocument(id);
+        return documentService.findDocument(id);
     }
     
     public boolean DocumentDataOnDemand.modifyDocument(Document obj) {
@@ -102,7 +107,7 @@ privileged aspect DocumentDataOnDemand_Roo_DataOnDemand {
     public void DocumentDataOnDemand.init() {
         int from = 0;
         int to = 10;
-        data = Document.findDocumentEntries(from, to);
+        data = documentService.findDocumentEntries(from, to);
         if (data == null) {
             throw new IllegalStateException("Find entries implementation for 'Document' illegally returned null");
         }
@@ -114,7 +119,7 @@ privileged aspect DocumentDataOnDemand_Roo_DataOnDemand {
         for (int i = 0; i < 10; i++) {
             Document obj = getNewTransientDocument(i);
             try {
-                obj.persist();
+                documentService.saveDocument(obj);
             } catch (ConstraintViolationException e) {
                 StringBuilder msg = new StringBuilder();
                 for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {

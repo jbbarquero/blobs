@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context" xmlns:jee="http://www.springframework.org/schema/jee" xmlns:tx="http://www.springframework.org/schema/tx" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd         http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.1.xsd         http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd">
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context" xmlns:jee="http://www.springframework.org/schema/jee" xmlns:tx="http://www.springframework.org/schema/tx" xmlns:util="http://www.springframework.org/schema/util" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd         http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.1.xsd         http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.1.xsd">
     <!--
         This will automatically locate any and all property files you have
         within your classpath, provided they fall under the META-INF/spring
@@ -47,6 +47,31 @@
         <context:exclude-filter expression=".*_Roo_.*" type="regex"/>
         <context:exclude-filter expression="org.springframework.stereotype.Controller" type="annotation"/>
     </context:component-scan>
+    
+    <!-- HIBERNATE Common -->
+    <!-- Nope: two differente vendors -->
+    
+    <!-- JPA Common -->
+    <util:properties id="jpaProperties">
+    	<!-- <prop key="hibernate.default_schema">${jpa.default_schema}</prop>  -->
+        <prop key="hibernate.format_sql">${jpa.format_sql}</prop>
+        <prop key="hibernate.connection.charSet">${jpa.connection.charSet}</prop>
+        <prop key="hibernate.ejb.naming_strategy">${jpa.ejb.naming_strategy}</prop>
+        <!-- prop key="hibernate.hbm2ddl.auto">${jpa.hbm2ddl.auto}</prop>  -->
+        <prop key="hibernate.transaction.manager_lookup_class">${jpa.transaction.manager_lookup_class}</prop>
+        <!-- CACHÉ -->
+        <!-- 
+        See "Configure Ehcache as the Second Level Cache Provider" at http://ehcache.org/documentation/hibernate.html 
+        <prop key="hibernate.cache.region.factory_class">${jpa.cache.region.factory_class}</prop>
+        -->
+        <!-- 
+        See "Enable Second Level Cache and Query Cache Settings" at http://ehcache.org/documentation/hibernate.html 
+        <prop key="hibernate.cache.use_second_level_cache">${jpa.cache.use_second_level_cache}</prop>
+        <prop key="hibernate.cache.use_query_cache">${jpa.cache.use_query_cache}</prop>
+        -->
+        <prop key="hibernate.connection.autocommit">false</prop>
+    </util:properties>
+    
     <!--  MYSQL -->
     <bean class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close" id="dataSourceMy">
         <property name="driverClassName" value="${database.mysql.driverClassName}"/>
@@ -61,14 +86,23 @@
         <property name="minEvictableIdleTimeMillis" value="1800000"/>
         <property name="validationQuery" value="SELECT 1"/>
     </bean>
+    <!-- 
     <bean class="org.springframework.orm.jpa.JpaTransactionManager" id="transactionManagerMy">
     	<qualifier value="mysql" />
         <property name="entityManagerFactory" ref="entityManagerFactoryMy"/>
     </bean>
     <tx:annotation-driven mode="aspectj" transaction-manager="transactionManagerMy"/>
+     -->
     <bean class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" id="entityManagerFactoryMy">
         <property name="persistenceUnitName" value="persistenceUnitMy"/>
         <property name="dataSource" ref="dataSourceMy"/>
+        <property name="jpaVendorAdapter">
+		    <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+		    	<property name="databasePlatform" value="org.hibernate.dialect.MySQL5InnoDBDialect" />
+		    	<property name="showSql" value="${database.mysql.showSql}"></property>
+		    </bean>
+        </property>
+        <property name="jpaProperties" ref="jpaProperties" />
     </bean>
      
     <!--  POSTGRESQL --> 
@@ -85,13 +119,37 @@
         <property name="minEvictableIdleTimeMillis" value="1800000"/>
         <property name="validationQuery" value="SELECT version();"/>
     </bean>
+    <!-- 
     <bean class="org.springframework.orm.jpa.JpaTransactionManager" id="transactionManagerPg">
     	<qualifier value="postgresql"/>
         <property name="entityManagerFactory" ref="entityManagerFactoryPg"/>
     </bean>
     <tx:annotation-driven mode="aspectj" transaction-manager="transactionManagerPg"/>
+     -->
     <bean class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" id="entityManagerFactoryPg">
         <property name="persistenceUnitName" value="persistenceUnitPg"/>
         <property name="dataSource" ref="dataSourcePg"/>
+        <property name="jpaVendorAdapter">
+		    <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+		    	<property name="databasePlatform" value="org.hibernate.dialect.PostgreSQLDialect" />
+		    	<property name="showSql" value="${database.mysql.showSql}"></property>
+		    </bean>
+        </property>
+        <property name="jpaProperties" ref="jpaProperties" />
     </bean>
+
+    <!-- JTA: Atomikos -->
+    <bean class="com.atomikos.icatch.jta.UserTransactionManager" id="atomikosUTM"  init-method="init" destroy-method="close">
+    	<property name="forceShutdown" value="false"/>
+    </bean>
+    
+    <bean class="com.atomikos.icatch.jta.UserTransactionImp" id="atomikosUTX">
+    	<property name="transactionTimeout" value="5" />
+    </bean>
+    
+    <bean class="org.springframework.transaction.jta.JtaTransactionManager" id="transactionManager">
+    	<property name="transactionManager" ref="atomikosUTM" />
+    	<property name="userTransaction" ref="atomikosUTX" />
+    </bean>
+    <tx:annotation-driven mode="aspectj" transaction-manager="transactionManager"/>
 </beans>

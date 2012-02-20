@@ -33,7 +33,7 @@ public class DocumentIntegrationTest {
 		
 		Document doc = dod.getNewTransientDocument(1);
 		
-		doc.setImagen(bytes);
+		doc.setBytes(bytes);
     	
 		doc.persist();
 		doc.flush();
